@@ -1,14 +1,26 @@
 $(function() {
   const STATES = [0,1,2,3];
+  let timer;
 
-  function randomState() {
-    return STATES[Math.floor(Math.random() * 4)]
+  function randomState(exclude) {
+    let possibleStates = $.grep(STATES, function(el) {
+      return el != exclude
+    });
+
+    return possibleStates[Math.floor(Math.random() * possibleStates.length)]
   }
 
-  function animateUI() {
+  function randomizeState() {
     let screen = $('.welcomeScreen');
-    screen.attr('data-state', randomState());
+    let currentState = screen.attr("data-state");
+    screen.attr('data-state', randomState(currentState));
   };
+
+  function animateUI() {
+    clearTimeout(timer);
+    timer = setTimeout(randomizeState, 100);
+  };
+
 
   $(".main").onepage_scroll({
     sectionContainer: ".page",     // sectionContainer accepts any kind of selector in case you don't want to use section
